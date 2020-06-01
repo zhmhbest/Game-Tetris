@@ -1,0 +1,6 @@
+.idea/**
+!.idea/modules.xml
+!.idea/Tetris.iml
+venv
+**logs
+**__pycache__
