@@ -4,7 +4,8 @@ from collections import deque
 import numpy as np
 import random
 
-#模型
+
+# 模型
 class DQNAgent:
 
     def __init__(self, state_size, mem_size=10000, discount=0.95,
@@ -29,7 +30,6 @@ class DQNAgent:
         self.replay_start_size = replay_start_size
         self.model = self._build_model()
 
-
     def _build_model(self):
         #创建模型
         model = Sequential()
@@ -41,21 +41,17 @@ class DQNAgent:
         model.add(Dense(1, activation=self.activations[-1]))
 
         model.compile(loss=self.loss, optimizer=self.optimizer)
-        
-        return model
 
+        return model
 
     def add_to_memory(self, current_state, next_state, reward, done):
         self.memory.append((current_state, next_state, reward, done))
 
-
     def random_value(self):
         return random.random()
 
-
     def predict_value(self, state):
         return self.model.predict(state)[0]
-
 
     def act(self, state):
         state = np.reshape(state, [1, self.state_size])
@@ -64,7 +60,7 @@ class DQNAgent:
         else:
             return self.predict_value(state)
 
-    #最佳状态
+    # 最佳状态
     def best_state(self, states):
         max_value = None
         best_state = None
@@ -81,10 +77,10 @@ class DQNAgent:
 
         return best_state
 
-    #训练
+    # 训练
     def train(self, batch_size=32, epochs=3):
         n = len(self.memory)
-    
+
         if n >= self.replay_start_size and n >= batch_size:
 
             batch = random.sample(self.memory, batch_size)

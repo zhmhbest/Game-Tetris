@@ -48,7 +48,7 @@ def dqn():
         while not done and (not max_steps or steps < max_steps):
             next_states = game.get_next_states()
             best_state = agent.best_state(next_states.values())
-            
+
             best_action = None
             for action, state in next_states.items():
                 if state == best_state:
@@ -57,7 +57,7 @@ def dqn():
 
             reward, done = game.play(best_action[0], best_action[1], render=render,
                                     render_delay=render_delay)
-            
+
             agent.add_to_memory(current_state, next_states[best_action], reward, done)
             current_state = next_states[best_action]
             steps += 1
