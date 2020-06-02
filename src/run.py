@@ -5,10 +5,10 @@ from statistics import mean, median
 import random
 from logs import CustomTensorBoard
 from tqdm import tqdm
-        
+
 
 def dqn():
-    env = Tetris()
+    game = Tetris()
     episodes = 2100
     max_steps = None
     epsilon_stop_episode = 1200
@@ -24,7 +24,7 @@ def dqn():
     render_delay = None
     activations = ['relu', 'relu', 'linear']
 
-    agent = DQNAgent(env.get_state_size(),
+    agent = DQNAgent(game.get_state_size(),
                      n_neurons=n_neurons, activations=activations,
                      epsilon_stop_episode=epsilon_stop_episode, mem_size=mem_size,
                      discount=discount, replay_start_size=replay_start_size)
@@ -35,7 +35,7 @@ def dqn():
     scores = []
 
     for episode in tqdm(range(episodes)):
-        current_state = env.reset()
+        current_state = game.reset()
         done = False
         steps = 0
 
@@ -46,7 +46,7 @@ def dqn():
 
         # 俄罗斯方块
         while not done and (not max_steps or steps < max_steps):
-            next_states = env.get_next_states()
+            next_states = game.get_next_states()
             best_state = agent.best_state(next_states.values())
             
             best_action = None
@@ -55,14 +55,14 @@ def dqn():
                     best_action = action
                     break
 
-            reward, done = env.play(best_action[0], best_action[1], render=render,
+            reward, done = game.play(best_action[0], best_action[1], render=render,
                                     render_delay=render_delay)
             
             agent.add_to_memory(current_state, next_states[best_action], reward, done)
             current_state = next_states[best_action]
             steps += 1
 
-        scores.append(env.get_game_score())
+        scores.append(game.get_game_score())
 
         # 训练
         if episode % train_every == 0:
